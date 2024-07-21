@@ -1,0 +1,192 @@
+package tarea2angelb;
+
+import javax.swing.JOptionPane;
+
+public class Tarea2Angelb {
+
+    public static void main(String[] args) {
+
+        /*
+        Desde la clase principal, deben crear una instancia de Factura y crear una función 
+        llamada "pagarFactura" el cual debe recibir como parámetro una instancia de la 
+        clase factura y debe retornar el total a pagar de todos los productos enviados. 
+         */
+        Factura factura1 = new Factura(1, "20/07/2024", "Angel Banegas");
+        Cliente datacliente = new Cliente("Angel Banegas", "05012002018428", "Colonia universidad", "32828738");
+        try {
+            factura1.agregarproducto("Leche", 30, "Lacteos", 2);
+            factura1.agregarproducto("Queso", 50, "Lacteos", 2);
+            factura1.agregarproducto("Maruchan", 15, "sopas", 1);
+            factura1.agregarproducto("Pechugas de pollo", 40, "carnes", 1);
+            factura1.agregarproducto("Camaron", 70, "carnes", 4);
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
+        }
+        /*Nota: No coloque como parametro una instacia de la clase factura porque solo me traería el total de 
+        un producto haciendo que ejercicio de factura no tuviera sentido.
+        Deje una validación que si desea pagar pagarfactura "true" me mostrará el detalle de la misma y si no un mensaje de saludo*/
+        factura1.pagarfactura(true);
+
+    }
+
+}
+package tarea2angelb;
+
+import java.util.ArrayList;
+
+/*Deben crear una clase “Factura”, la cual debe tener las propiedades (entre 
+parentesis el tipo de dato que debe corresponder a cada propiedad):  
+• numero (int),  
+• fecha (String),  
+• cliente (Cliente) 
+• productos (Producto[])*/
+public class Factura {
+
+    private int numero = 0;
+    private String fecha = "20/07/2024";
+    private String cliente = "Angel banegas";
+    private final ArrayList<Producto> Listproductos = new ArrayList();
+
+    /*El constructor de la clase debe recibir como parámetros el número de la factura, la 
+    fecha y el cliente, además, una función "agregarProducto", la cual debe recibir 
+    como parámetro, una instancia de la clase Producto, esta será para agregar a la 
+    lista de productos de la instancia "Factura". */
+    Factura(int nfactura, String fecha, String cliente) {
+        numero = nfactura;
+        this.fecha = fecha;
+        this.cliente = cliente;
+    }
+
+    void agregarproducto(String nombre, double precio, String categoria, int cantidad) throws Exception {
+        if (precio <= 0) {
+            throw new Exception("Precio invalido");
+        }
+        if (cantidad <= 0) {
+            throw new Exception("Cantidad invalido");
+        } else {
+            Producto productonuevo = new Producto(nombre, precio, categoria, cantidad);
+            Listproductos.add(productonuevo);
+        }
+    }
+
+    void pagarfactura(boolean valor) {
+        if (valor == true) {
+            System.out.println("========Factura========");
+            System.out.println("Numero de factura: " + numero);
+            System.out.println("Fecha: " + fecha);
+            System.out.println("Nombre del Cliente: " + cliente);
+            System.out.println("========Detalle Factura========");
+            System.out.println("Nombre del producto    Cantidad   Precio");
+            String Producto;
+            double precio;
+            Integer cantidad = 0;
+            double total = 0;
+            double totalxproduc;
+            for (int a = 0; a < Listproductos.size(); a++) {
+                Producto = Listproductos.get(a).getNombre();
+                precio = Listproductos.get(a).getPrecio();
+                cantidad = Listproductos.get(a).getCantidad();
+                String Scantidad = cantidad.toString();
+                totalxproduc = precio * cantidad;
+                total = total + totalxproduc;
+                System.out.print(Producto);
+                for (int b = Producto.length(); b < 23; b++) {
+                    System.out.print(" ");
+                }
+                System.out.print(cantidad);
+                for (int b = Scantidad.length(); b <= 10; b++) {
+                    System.out.print(" ");
+                }
+                System.out.println(precio);
+            }
+            System.out.println("Total                             "+ + total+"\n"+"\n");
+            System.out.println("      ___________________________ ");
+            System.out.println("                Firma             ");
+
+        } else {
+            System.out.println("Gracias por prefereirnos hasta la proxima");
+        }
+
+    }
+}
+package tarea2angelb;
+
+/*
+Clase “Producto”, la cual debe tener las propiedades (entre paréntesis el tipo 
+de dato que debe corresponder a cada propiedad):  
+• nombre (String)  
+• precio (double)  
+• categoria (CategoriaProducto) 
+• cantidad (int)
+ */
+public class Producto {
+
+    private String nombre;
+    private double precio;
+    private String categoria;
+    private int cantidad;
+
+    Producto(String nombre, double precio, String categoria, int cantidad) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.categoria = categoria;
+        this.cantidad = cantidad;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+}
+package tarea2angelb;
+
+/*
+Clase “Cliente”, la cual debe tener las propiedades (entre paréntesis el tipo de 
+dato que debe corresponder a cada propiedad):  
+• nombre (String) 
+• rtn (String) 
+• direccion (String) 
+• telefono (String)
+ */
+public class Cliente {
+
+    private String nombre;
+    private String rtn;
+    private String direccion;
+    private String telefono;
+
+    Cliente(String nombre, String rtn, String direccion, String telefono) {
+        this.nombre = nombre;
+        this.rtn = rtn;
+        this.direccion = direccion;
+        this.telefono = telefono;
+
+    }
+
+}
+package tarea2angelb;
+
+/*
+Clase "CategoriaProducto", la cual debe tener las propiedades (entre 
+parentesis el tipo de dato que debe corresponder a cada propiedad):  
+• nombre (String) 
+• pasillo (int)
+ */
+public class Categoriaproductos {
+
+    private String nombre = "Leche";
+    private int pasillo = 5;
+
+    Categoriaproductos(String nombre, int pasillo) {
+        this.nombre = nombre;
+        this.pasillo = pasillo;
+    }
+}
+
